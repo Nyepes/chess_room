@@ -9,7 +9,12 @@ function App() {
     <Router class = "base">
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/chess-room" element={<ChessGame roomCode="1"/>}/>
+        <Route path="/chess-room" element={
+          <ChessGame 
+            roomCode="1"
+            socket = { socket }
+            />
+        }/>
       </Routes>
     </Router>
   )
