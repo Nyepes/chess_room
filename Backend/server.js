@@ -23,15 +23,20 @@ io.on('connection', (socket) => {
         console.log(`User Disconnected: ${socket.id}`);
     })
     socket.on('join_room', (data) => {
-        const { room } = data
-        socket.join(room);
-        chatRoom = room;
+        socket.join(data);
+        let clients = io.sockets.adapter.rooms;
+        let size = clients.get(data)? clients.size : 0;
+        if (size >= 2) return -1;
+        if (size == 1) return 1;
+        else return 0;
     });
 
     socket.on('make_move', (data) => {
-        const move = data;
-        // console.log(move);
-        io.emit('recieve_move', move);
+        const move = data.move;
+        const room = data.room;
+        const turn = data.turn;
+        console.log(turn);
+        io.to(room).emit('recieve_move', {move:move, turn: turn});
     });
 
 });
