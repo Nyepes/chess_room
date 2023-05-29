@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3001',
+        origin: 'http://localhost:3000',
         methods: ['GET', 'POST']
     }
 });
@@ -28,11 +28,8 @@ io.on('connection', (socket) => {
         socket.join(data);
         let clients = io.sockets.adapter.rooms.get(data);
         let size = clients? clients.size : 0;
-        console.log(clients);
-        console.log(size);
         if (size != 2) return;
-        console.log('here')
-        var i = 0
+        let i = 0
         for (const client of clients) {
             console.log(client);
             io.to(client).emit('join_room', i);

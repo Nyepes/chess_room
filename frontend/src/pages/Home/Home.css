@@ -1,0 +1,39 @@
+.card {
+    background-color: #F1DEC9;
+    margin:10% 30%;
+    text-align: center;
+}
+
+.card-body {
+    text-align: center;
+}
+.base {
+    background-color: #8D7B68;
+}
+
+.btn-primary {
+    background-color: #C8B6A6;
+    border-color: #C8B6A6
+}
+
+.btn-primary:hover {
+    color: white;
+    background-color: #A4907C;
+    border-color: #A4907C
+}
+.btn-primary:checked {
+    background-color: #A4907C;
+}
+.btn-primary:focus {
+    background-color: #A4907C;
+}
+.form-control {
+    margin: auto;
+    text-align: center;
+    width: 70%;
+}
+.form-control:focus {
+    border-color: white;
+    box-shadow: none;
+    
+}

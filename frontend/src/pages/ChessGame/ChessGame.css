@@ -1,0 +1,70 @@
+.App {
+  text-align: center;
+  height: 24em;
+  align-items: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+#board {
+  height: 24em;
+  width: 24em;
+  background-color: blue;
+}
+
+.board-square-dark {
+  height: 2.5em;
+  width: 2.5em;
+  padding: 0.25em;
+  float: left;
+  border-width: 1px;
+  background-color:brown;
+}
+.board-square-light {
+  height: 2.5em;
+  width: 2.5em;
+  padding: 0.25em;
+  float: left;
+  border-width: 1px;
+  background-color: #61dafb;
+}
+.board-square-selected {
+  height: 2.5em;
+  width: 2.5em;
+  padding: 0.25em;
+  float: left;
+  border-width: 1px;
+  background-color: red;
+}
+
+.board {
+  height: fit-content;
+  width: 500px;
+  margin: 10px auto;
+}
+
+.alert {
+  text-align: center;
+}
+
+.timer {
+  text-align: "center";
+  color: white;
+}
+/* #chessboard {
+  height: 10em;
+  width:10em;
+} */
