@@ -3,12 +3,14 @@ import Home  from "./pages/Home/Home";
 import ChessGame  from "./pages/ChessGame/ChessGame";
 import io from 'socket.io-client';
 import "./App.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const socket = io.connect('http://localhost:4000');
 function App() {
   const [room, setRoom] = useState('');
-  const [color, setColor] = useState(-1);
+  const [color, setColor] = useState(true);
+
+
   return (
     <Router class = "base">
       <Routes>

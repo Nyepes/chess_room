@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: 'http://localhost:3001',
         methods: ['GET', 'POST']
     }
 });
@@ -19,16 +19,27 @@ let chatRoom = '';
 
 io.on('connection', (socket) => {
     console.log(`User Connected ${socket.id}`)
+
     socket.on('disconnect', () => {
         console.log(`User Disconnected: ${socket.id}`);
     })
+
     socket.on('join_room', (data) => {
         socket.join(data);
-        let clients = io.sockets.adapter.rooms;
-        let size = clients.get(data)? clients.size : 0;
-        if (size >= 2) return -1;
-        if (size == 1) return 1;
-        else return 0;
+        let clients = io.sockets.adapter.rooms.get(data);
+        let size = clients? clients.size : 0;
+        console.log(clients);
+        console.log(size);
+        if (size != 2) return;
+        console.log('here')
+        var i = 0
+        for (const client of clients) {
+            console.log(client);
+            io.to(client).emit('join_room', i);
+            i += 1;
+        }
+        // io/*.to(clients.get(data)[0])*/.emit('join_room', 0);
+        // io/*.to(clients.get(data)[1])*/.emit('join_room', 1);
     });
 
     socket.on('make_move', (data) => {
