@@ -5,36 +5,18 @@ import {Chess} from "chess.js";
 
 
 
-function ChessGame({roomCode, socket}) {
+function ChessGame({roomCode, socket, color, setColor}) {
   const [game, setGame] = useState(new Chess());
-  const [color, setColor] = useState(1);
-  const c = useRef(color);
   const g = useRef(game);
   function isWhite(){
-    return c.current === 1? true : false;
+    return color.current === 1;
   }
 
-  useEffect(() => {
-    const handleJoinRoom = (data) => {
-      console.log(`color ${data}`);
-      setColor(data);
-      c.current = data;
-    }
-    socket.on('join_room', handleJoinRoom);
-
-    return () => socket.off('join_room', handleJoinRoom);
-  }, [socket]);
 
   useEffect(() => {
     const handleReceiveMove = (data) => {
-      console.log(c.current)
       if (data.turn !== isWhite()) {
-        const gameCopy = Object.assign(Object.create(Object.getPrototypeOf(g.current)), g.current);
-        console.log(data.move);
-        const result = gameCopy.move(data.move);
-        console.log(result);
-        setGame(gameCopy);
-        g.current = gameCopy;
+        makeAMove(data.move)
       }
     }
     socket.on('recieve_move', handleReceiveMove);
@@ -47,7 +29,6 @@ function ChessGame({roomCode, socket}) {
     if (result === null) return false;
     setGame(gameCopy);
     g.current = gameCopy;
-    socket.emit('make_move', {move: move, room: roomCode, turn: isWhite()});
     return result; // null if the move was illegal, the move object if the move was legal
   }
   function onDrop(sourceSquare, targetSquare) {
@@ -60,6 +41,7 @@ function ChessGame({roomCode, socket}) {
       to: targetSquare,
       promotion: "q", // always promote to a queen for example simplicity
     });
+    socket.emit('make_move', {move: move, room: roomCode, turn: isWhite()});
     return move;
   }
   // function onSquareClick(square) {

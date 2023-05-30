@@ -25,16 +25,27 @@ io.on('connection', (socket) => {
     })
 
     socket.on('join_room', (data) => {
-        socket.join(data);
+        console.log(data);
         let clients = io.sockets.adapter.rooms.get(data);
         let size = clients? clients.size : 0;
-        if (size != 2) return;
-        let i = 0
-        for (const client of clients) {
-            console.log(client);
-            io.to(client).emit('join_room', i);
-            i += 1;
+        if (size == 0) {
+            socket.join(data);
+            io.to(socket.id).emit('join_room', 1);
+        } else if (size == 1) {
+            socket.join(data);
+            io.to(socket.id).emit('join_room', 0);
         }
+        socket.to(socket.id).emit('join_room', -1);
+        // if (size >= 1) return;
+        // console.log('joined');
+        // socket.join(data);
+        // clients = io.sockets.adapter.rooms.get(data);
+        // let i = 0
+        // for (const client of clients) {
+        //     console.log(client);
+        //     io.to(client).emit('join_room', i);
+        //     i += 1;
+        // }
         // io/*.to(clients.get(data)[0])*/.emit('join_room', 0);
         // io/*.to(clients.get(data)[1])*/.emit('join_room', 1);
     });
@@ -43,7 +54,7 @@ io.on('connection', (socket) => {
         const move = data.move;
         const room = data.room;
         const turn = data.turn;
-        console.log(turn);
+        console.log(room);
         io.to(room).emit('recieve_move', {move:move, turn: turn});
     });
 
