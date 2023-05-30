@@ -5,14 +5,8 @@ import Alert from '../Alert';
 function Home({ socket, color, setColor, setRoom, room }) {
     const [colorValid, setColorValid] = useState(true);
     const navigate = useNavigate();
-
-    const isValidColor = () => {
-        console.log(color.current)
-        return color.current !== -1;
-    }
     const join_room =  () => {
-        console.log(colorValid);
-        if (colorValid && room !== "") {
+        if (room !== "") {
             socket.emit('join_room',  room );
         }
     };
@@ -22,8 +16,6 @@ function Home({ socket, color, setColor, setRoom, room }) {
             color.current = data;
             if (data !== -1) navigate('/chess-room');
         }
-        console.log('Hello');
-        console.log(color.current);
         socket.on('join_room', handleJoinRoom);
         
         return () => socket.off('join_room', handleJoinRoom);

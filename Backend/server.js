@@ -38,18 +38,6 @@ io.on('connection', (socket) => {
             console.log("here");
             io.to(socket.id).emit('join_room', -1);
         }
-        // if (size >= 1) return;
-        // console.log('joined');
-        // socket.join(data);
-        // clients = io.sockets.adapter.rooms.get(data);
-        // let i = 0
-        // for (const client of clients) {
-        //     console.log(client);
-        //     io.to(client).emit('join_room', i);
-        //     i += 1;
-        // }
-        // io/*.to(clients.get(data)[0])*/.emit('join_room', 0);
-        // io/*.to(clients.get(data)[1])*/.emit('join_room', 1);
     });
 
     socket.on('make_move', (data) => {
