@@ -34,8 +34,10 @@ io.on('connection', (socket) => {
         } else if (size == 1) {
             socket.join(data);
             io.to(socket.id).emit('join_room', 0);
+        } else {
+            console.log("here");
+            io.to(socket.id).emit('join_room', -1);
         }
-        socket.to(socket.id).emit('join_room', -1);
         // if (size >= 1) return;
         // console.log('joined');
         // socket.join(data);

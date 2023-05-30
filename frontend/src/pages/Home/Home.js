@@ -3,28 +3,34 @@ import './Home.css'
 import { useEffect, useRef, useState } from 'react';
 import Alert from '../Alert';
 function Home({ socket, color, setColor, setRoom, room }) {
+    const [colorValid, setColorValid] = useState(true);
     const navigate = useNavigate();
 
     const isValidColor = () => {
+        console.log(color.current)
         return color.current !== -1;
     }
     const join_room =  () => {
-        if (isValidColor() && room !== "") {
+        console.log(colorValid);
+        if (colorValid && room !== "") {
             socket.emit('join_room',  room );
         }
     };
     useEffect(() => {
         const handleJoinRoom = (data) => {
+            setColorValid(data !== -1)
             color.current = data;
-            if (isValidColor) navigate('/chess-room');
+            if (data !== -1) navigate('/chess-room');
         }
+        console.log('Hello');
+        console.log(color.current);
         socket.on('join_room', handleJoinRoom);
         
         return () => socket.off('join_room', handleJoinRoom);
       }, [socket]);
     return (
         <div>
-            <Alert isVisible={!isValidColor()}></Alert>
+            <Alert isVisible={!colorValid}></Alert>
             <div class="card">
             <div class="card-body">
                 <h3>Chess-Room</h3>
