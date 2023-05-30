@@ -11,6 +11,9 @@ function ChessGame({roomCode, socket, color, setColor}) {
   function isWhite(){
     return color.current === 1;
   }
+  function getColor() {
+    return isWhite()? 'w' : 'b';
+  }
 
 
   useEffect(() => {
@@ -33,7 +36,9 @@ function ChessGame({roomCode, socket, color, setColor}) {
   }
   function onDrop(sourceSquare, targetSquare) {
     //TODO Manage Under promotions
-    if (sourceSquare === null || g.current.get(sourceSquare).color === g.current.get(targetSquare).color) {
+    if (sourceSquare === null || 
+      g.current.get(sourceSquare).color === g.current.get(targetSquare).color ||
+      g.current.get(sourceSquare).color !== getColor()) {
       return false;
     }
     const move = makeAMove({
