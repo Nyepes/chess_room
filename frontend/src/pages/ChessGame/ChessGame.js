@@ -6,16 +6,23 @@ import {Chess} from "chess.js";
 
 
 function ChessGame({roomCode, socket, color, setColor}) {
+  const started = useRef(false);
   const [game, setGame] = useState(new Chess());
   const g = useRef(game);
-  function isWhite(){
+  function isWhite() {
     return color.current === 1;
   }
   function getColor() {
     return isWhite()? 'w' : 'b';
   }
 
-
+  useEffect( () => {
+    const startGame = () => {
+      started.current = true;
+    }
+    socket.on('start_game', startGame);
+    return () => socket.off('start_game', startGame);
+  })
   useEffect(() => {
     const handleReceiveMove = (data) => {
       if (data.turn !== isWhite()) {
@@ -35,10 +42,10 @@ function ChessGame({roomCode, socket, color, setColor}) {
     return result; // null if the move was illegal, the move object if the move was legal
   }
   function onDrop(sourceSquare, targetSquare) {
-    //TODO Manage Under promotions
+    // TODO Manage Under promotions
     if (sourceSquare === null || 
       g.current.get(sourceSquare).color === g.current.get(targetSquare).color ||
-      g.current.get(sourceSquare).color !== getColor()) {
+      g.current.get(sourceSquare).color !== getColor() || !started.current) {
       return false;
     }
     const move = makeAMove({
