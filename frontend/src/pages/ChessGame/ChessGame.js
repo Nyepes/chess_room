@@ -2,6 +2,7 @@ import './ChessGame.css';
 import { useState, useEffect, useRef } from 'react';
 import { Chessboard } from "react-chessboard";
 import {Chess} from "chess.js";
+import EndGameAlert from './EndGameAlert';
 
 
 
@@ -15,14 +16,20 @@ function ChessGame({roomCode, socket, color, setColor}) {
   function getColor() {
     return isWhite()? 'w' : 'b';
   }
-
+  useEffect( () => {
+    const handleDisconnect = () => {
+      alert('Opponent Disconnected. You win');
+    }
+    socket.on('user_disconnect', handleDisconnect);
+    return () => socket.off('user_disconnect', handleDisconnect);
+  }, [socket])
   useEffect( () => {
     const startGame = () => {
       started.current = true;
     }
     socket.on('start_game', startGame);
     return () => socket.off('start_game', startGame);
-  })
+  }, [socket])
   useEffect(() => {
     const handleReceiveMove = (data) => {
       if (data.turn !== isWhite()) {
@@ -39,6 +46,9 @@ function ChessGame({roomCode, socket, color, setColor}) {
     if (result === null) return false;
     setGame(gameCopy);
     g.current = gameCopy;
+    if (g.current.isGameOver()) {
+      alert('game_over');
+    }
     return result; // null if the move was illegal, the move object if the move was legal
   }
   function onDrop(sourceSquare, targetSquare) {

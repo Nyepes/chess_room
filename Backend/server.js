@@ -15,27 +15,28 @@ const io = new Server(server, {
     }
 });
 
-let chatRoom = '';
 
 io.on('connection', (socket) => {
     console.log(`User Connected ${socket.id}`)
-
+    let roomKey = "";
     socket.on('disconnect', () => {
+        io.to(roomKey).emit('user_disconnect')
         console.log(`User Disconnected: ${socket.id}`);
+        
     })
 
-    socket.on('join_room', (data) => {
-        console.log(data);
-        let clients = io.sockets.adapter.rooms.get(data);
+    socket.on('join_room', (room) => {
+        roomKey = room;
+        let clients = io.sockets.adapter.rooms.get(room);
         let size = clients? clients.size : 0;
-        if (size == 0) {
-            socket.join(data);
+        if (size === 0) {
+            socket.join(room);
             io.to(socket.id).emit('join_room', 1);
-        } else if (size == 1) {
-            socket.join(data);
+        } else if (size === 1) {
+            socket.join(room);
             io.to(socket.id).emit('join_room', 0);
             for (let client of clients) {
-                io.to(data).emit('start_game')
+                io.to(room).emit('start_game')
             }
         } else {
             io.to(socket.id).emit('join_room', -1);
